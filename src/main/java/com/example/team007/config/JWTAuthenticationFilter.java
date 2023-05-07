@@ -1,5 +1,6 @@
 package com.example.team007.config;
 
+import com.example.team007.config.JWTDecoder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         extractTokenFrpmRequest(request)
                 .map(jwtDecoder::decode)
-                        .map(jwtToPrincipalConverter::convert)
-                                .map(UserPrincipalAuthenticationToken::new)
-                                        .ifPresent(authetication-> SecurityContextHolder.getContext().setAuthentication(authetication));
+                .map(jwtToPrincipalConverter::convert)
+                .map(UserPrincipalAuthenticationToken::new)
+                .ifPresent(authetication-> SecurityContextHolder.getContext().setAuthentication(authetication));
         filterChain.doFilter(request,response);
     }
     private Optional<String> extractTokenFrpmRequest(HttpServletRequest httpServletRequest){

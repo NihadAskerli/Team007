@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -26,21 +31,27 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http
-                .csrf().disable()
-                .cors().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .formLogin().disable()
-                .exceptionHandling().authenticationEntryPoint(unautharizedHandler)
-                .and()
+                .csrf().disable().cors().configurationSource(corsConfigurationSource()).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().formLogin().disable()
+                .exceptionHandling().authenticationEntryPoint(unautharizedHandler).and()
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry.
-                        requestMatchers("/").permitAll().
-                        requestMatchers("/otp/send-otp").permitAll().
-                        requestMatchers("/otp/verify-otp").permitAll().
-                        requestMatchers("/auth/login").permitAll().
-                        requestMatchers("/auth/test").hasRole("USER").
+                        requestMatchers("/auth/**").permitAll().
+                        requestMatchers("/assistantPage/search").hasRole("ADMIN").
                         anyRequest().authenticated());
+
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://code8-project.vercel.app/"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
@@ -50,11 +61,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(customUserDetailService)
-                .passwordEncoder(passwordEncoder())
-                .and().build();
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(customUserDetailService)
+                .passwordEncoder(passwordEncoder()).and().build();
     }
-
-
 }
