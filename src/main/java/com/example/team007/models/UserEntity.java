@@ -1,16 +1,34 @@
-//package com.example.team007.models;
-//
-//import com.fasterxml.jackson.annotation.JsonIgnore;
-//import lombok.Getter;
-//import lombok.Setter;
-//
-//@Getter
-//@Setter
-//public class UserEntity {
-//    private Long id;
-//    private String email;
-//    @JsonIgnore
-//    private String password;
-//    private String role;
-//    private String extraInfo;
-//}
+package com.example.team007.models;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "UserEntity")
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class UserEntity {
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "seq_product"
+    )
+    @SequenceGenerator(
+            name = "seq_product",
+            allocationSize = 1
+    )
+    private Long id;
+    private String name;
+    private String surname;
+    @Column(unique = true)
+    private String email;
+    private String password;
+
+    @ElementCollection
+    private List<Role> role;
+}
