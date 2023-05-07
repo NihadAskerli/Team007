@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/hack
+    username: postgres
+    password: nez1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    username: nzrnsuleymanli13@gmail.com
+    password: aykfucmxqvshidrv
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

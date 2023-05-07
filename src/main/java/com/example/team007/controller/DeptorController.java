@@ -41,8 +41,8 @@ public class DeptorController {
     }
 
     @PostMapping("/save")
-    public Deptor saveDeptor(@RequestBody DeptorDto deptorDto) throws JsonProcessingException {
-//        DeptorDto deptorDto1 = objectMapper.readValue(deptorDto, DeptorDto.class);
+    public Deptor saveDeptor(@RequestBody String  deptorDto) throws JsonProcessingException {
+        DeptorDto deptorDto1 = objectMapper.readValue(deptorDto, DeptorDto.class);
         Deptor deptor = objectMapper.convertValue(deptorDto, Deptor.class);
         Deptor deptor1 = deptorService.saveDeptor(deptor);
         return deptor1;
