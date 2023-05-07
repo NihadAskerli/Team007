@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "security.jwt",
+      "type": "com.example.team007.config.JWTProperties",
+      "sourceType": "com.example.team007.config.JWTProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "security.jwt.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.example.team007.config.JWTProperties"
+    }
+  ],
+  "hints": []
+}
