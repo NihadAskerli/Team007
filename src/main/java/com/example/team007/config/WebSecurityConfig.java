@@ -35,6 +35,8 @@ public class WebSecurityConfig {
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry.
                         requestMatchers("/").permitAll().
+                        requestMatchers("/otp/send-otp").permitAll().
+                        requestMatchers("/otp/verify-otp").permitAll().
                         requestMatchers("/auth/login").permitAll().
                         requestMatchers("/auth/test").hasRole("USER").
                         anyRequest().authenticated());
